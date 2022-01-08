@@ -1,4 +1,4 @@
-package com.cloud.bgmeetup.services.model;
+package com.cloud.bgmeetup.services.dto;
 
 import lombok.*;
 
@@ -10,7 +10,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Builder
-public class User {
+public class UserDto {
     private UUID id;
     private String email;
     private String firstName;

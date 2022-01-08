@@ -1,7 +1,8 @@
 package com.cloud.bgmeetup.services.dto;
 
 import lombok.*;
-import java.util.UUID;
+
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -9,12 +10,12 @@ import java.util.UUID;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Builder
-public class UserDto {
-    private UUID id;
+public class UserLoginDto {
+    @Size(min=1, max=256)
     private String email;
     private String firstName;
     private String lastName;
-    private String location;
-    private byte[] passwordSalt;
-    private byte[] passwordHash;
+    @Size(min=1, max=128)
+    private String password;
+    private String confirmPassword;
 }

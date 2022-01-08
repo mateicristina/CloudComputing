@@ -1,6 +1,8 @@
 package com.cloud.bgmeetup.services.repository;
 
+
 import com.cloud.bgmeetup.services.dto.UserDto;
+import com.cloud.bgmeetup.services.dto.UserLoginDto;
 import com.cloud.bgmeetup.services.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,26 +20,26 @@ public class UserRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public Optional<UserDto> get(String id) {
-        String sql = "SELECT * FROM user WHERE id = ?";
-        RowMapper<UserDto> mapper = getUserRowMapper();
-        return jdbcTemplate.query(sql, mapper, id).stream().findFirst();
-    }
-
-
-    public User update(User user) {
-        String sql = "UPDATE user SET email = ?, firstName = ?, lastName = ?, location = ? WHERE id = ?";
+    public void register(User user) {
+        String sql = "INSERT INTO user VALUES(?, ?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(connection -> {
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1, user.getEmail());
-            preparedStatement.setString(2, user.getFirstName());
-            preparedStatement.setString(3, user.getLastName());
-            preparedStatement.setString(4, user.getLocation());
-            preparedStatement.setObject(5, user.getId().toString());
+            preparedStatement.setObject(1, UUID.randomUUID().toString());
+            preparedStatement.setString(2, user.getEmail());
+            preparedStatement.setString(3, user.getFirstName());
+            preparedStatement.setString(4, user.getLastName());
+            preparedStatement.setString(5, user.getLocation());
+            preparedStatement.setObject(6, user.getPasswordHash());
+            preparedStatement.setObject(7, user.getPasswordSalt());
             return preparedStatement;
         });
-        return user;
+    }
+
+    public Optional<UserDto> login(UserLoginDto userLogin) {
+        String sql = "SELECT * FROM user WHERE email = ?";
+        RowMapper<UserDto> mapper = getUserRowMapper();
+        return jdbcTemplate.query(sql, mapper, userLogin.getEmail()).stream().findFirst();
     }
 
     private RowMapper<UserDto> getUserRowMapper() {
