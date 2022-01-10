@@ -12,7 +12,7 @@ CREATE TABLE `event` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-CREATE TABLE `eventparticipant` (
+CREATE TABLE `event_participant` (
   `eventId` varchar(36) NOT NULL,
   `participantId` varchar(36) NOT NULL,
   PRIMARY KEY (`eventId`,`participantId`)
